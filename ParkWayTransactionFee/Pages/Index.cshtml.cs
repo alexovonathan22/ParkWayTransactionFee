@@ -24,8 +24,8 @@ namespace ParkWayTransactionFee.Pages
         {
             if (ModelState.IsValid) 
             {
-                string FileLoc = @"C:\Users\HP\source\repos\ParkWayTransactionFee\ParkWayTransactionFee\fees.config.json";
-                FeeCollection feeJson = null;
+                string FileLoc = @"C:\Users\HP\source\repos\ParkWayTransactionFee\ParkWayTransactionFee\wwwroot\feeConfigJson\fees.config.json";
+                FeeCollection feeJsonToObj = null;
 
                 try
                 {
@@ -33,13 +33,14 @@ namespace ParkWayTransactionFee.Pages
                     using (var reader = new StreamReader(FileLoc))
                     {
                         readFromJson =  reader.ReadToEnd();
-                        feeJson = JsonConvert.DeserializeObject<FeeCollection>(readFromJson);
+                        feeJsonToObj = JsonConvert.DeserializeObject<FeeCollection>(readFromJson);
                     }
 
-                    Result = feeJson.Fees.Where(c => Amount <= c.maxAmount && Amount >= c.minAmount).Select(c => c.feeAmount).FirstOrDefault();
+                    Result = feeJsonToObj.Fees.Where(c => Amount <= c.maxAmount && Amount >= c.minAmount)
+                                         .Select(c => c.feeAmount).FirstOrDefault();
 
 
-                    //ViewData["FeeCharge"] = Result;   
+                      
                     if(Result != 0)
                         return RedirectToPage("Success", new { Amount = Amount, Result = Result});
                     else
