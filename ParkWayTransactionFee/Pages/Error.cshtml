@@ -1,0 +1,19 @@
+﻿@page
+@model ErrorModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+@if (Model.Result == 0)
+{
+    <div class="alert alert-danger col-6" role="alert">
+        Transaction Amount of <strong>#@Model.Amount</strong> is out of range! <br /> <br />
+        <a asp-page="Index" style="color:darkred" class="alert-dark alert">Go Back</a> <br />
+    </div>
+
+}
+
+
+
+
+

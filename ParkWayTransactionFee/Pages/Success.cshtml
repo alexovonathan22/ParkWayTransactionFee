@@ -1,0 +1,15 @@
+﻿@page
+@model ParkWayTransactionFee.SuccessModel
+@{
+    ViewData["Title"] = "Success";
+}
+
+@if (Model.Result != 0)
+{
+    <div class="alert alert-success col-6" role="alert">
+        The transaction charge on<strong><em> #@Model.Amount is: #@Model.Result</em></strong><br /><br />
+        <a asp-page="Index" style="color:darkslategrey" class="alert-dark alert">Go Back</a> <br />
+
+    </div>
+}
+
