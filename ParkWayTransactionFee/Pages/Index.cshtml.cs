@@ -24,6 +24,9 @@ namespace ParkWayTransactionFee.Pages
 
         [BindProperty]
         public float Amount { get; set; }
+
+        public float UserValue { get; set; }
+
         [BindProperty]
         public float Result { get; set; }
 
@@ -36,6 +39,7 @@ namespace ParkWayTransactionFee.Pages
                 {
                     if(Amount > 0 && Amount <= 999999999)
                     {
+                         UserValue = Amount;
                         int val = (int)Math.Ceiling(Amount);
                         Amount = val;
                     }
@@ -44,7 +48,7 @@ namespace ParkWayTransactionFee.Pages
                                          .Select(c => c.feeAmount).FirstOrDefault();
 
                     if (Result != 0)
-                        return RedirectToPage("Success", new { Amount = Amount, Result = Result });
+                        return RedirectToPage("Success", new { Amount = UserValue, Result = Result });
                     else
                         return RedirectToPage("Error", new { Amount = Amount, Result = Result });
 
