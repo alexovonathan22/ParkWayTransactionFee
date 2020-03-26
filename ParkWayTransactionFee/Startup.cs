@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ParkWayTransactionFee.Pages;
 
 namespace ParkWayTransactionFee
 {
@@ -23,6 +24,7 @@ namespace ParkWayTransactionFee
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<List<Fee>>(Configuration.GetSection("fees"));
             services.AddRazorPages();
         }
 

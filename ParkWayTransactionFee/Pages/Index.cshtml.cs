@@ -5,44 +5,46 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace ParkWayTransactionFee.Pages
 {
     public class IndexModel : PageModel
     {
-        [BindProperty]
-        public FeeCollection feeObj { get; set; }
+        private readonly IOptions<List<Fee>> _fee;
+        public IndexModel(IOptions<List<Fee>> fee)
+        {
+            _fee = fee;
+        }
+        //[BindProperty]
+        //public FeeCollection feeObj { get; set; }
 
         [BindProperty]
-        public int Amount { get; set; }
+        public float Amount { get; set; }
         [BindProperty]
-        public int Result { get; set; }
+        public float Result { get; set; }
 
         public IActionResult OnPost()
         {
-            if (ModelState.IsValid) 
-            {
-                string FileLoc = @"C:\Users\HP\source\repos\ParkWayTransactionFee\ParkWayTransactionFee\wwwroot\feeConfigJson\fees.config.json";
-                FeeCollection feeJsonToObj = null;
 
+            if (ModelState.IsValid)
+            {
                 try
                 {
-                    string readFromJson;
-                    using (var reader = new StreamReader(FileLoc))
+                    if(Amount > 0 && Amount <= 999999999)
                     {
-                        readFromJson =  reader.ReadToEnd();
-                        feeJsonToObj = JsonConvert.DeserializeObject<FeeCollection>(readFromJson);
+                        int val = (int)Math.Ceiling(Amount);
+                        Amount = val;
                     }
 
-                    Result = feeJsonToObj.Fees.Where(c => Amount <= c.maxAmount && Amount >= c.minAmount)
+                    Result = _fee.Value.Where(c => Amount <= c.maxAmount && Amount >= c.minAmount)
                                          .Select(c => c.feeAmount).FirstOrDefault();
 
-
-                      
-                    if(Result != 0)
-                        return RedirectToPage("Success", new { Amount = Amount, Result = Result});
+                    if (Result != 0)
+                        return RedirectToPage("Success", new { Amount = Amount, Result = Result });
                     else
                         return RedirectToPage("Error", new { Amount = Amount, Result = Result });
 
@@ -53,10 +55,10 @@ namespace ParkWayTransactionFee.Pages
                     return Page();
                 }
             }
+            //var Fee = _fee.Value;
 
             return Page();
         }
-       
     }
 
     public class Fee
@@ -65,10 +67,5 @@ namespace ParkWayTransactionFee.Pages
         public int maxAmount { get; set; }
         public int feeAmount { get; set; }
     }
-
-    public class FeeCollection
-    {
-        public List<Fee> Fees { get; set; }
-
-    }
+    
 }

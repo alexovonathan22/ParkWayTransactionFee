@@ -10,9 +10,9 @@ namespace ParkWayTransactionFee
     public class SuccessModel : PageModel
     {
         [BindProperty(SupportsGet = true)]
-        public int Result { get; set; }
+        public float Result { get; set; }
         [BindProperty(SupportsGet = true)]
-        public int Amount { get; set; }
+        public float Amount { get; set; }
         public void OnGet()
         {
 
