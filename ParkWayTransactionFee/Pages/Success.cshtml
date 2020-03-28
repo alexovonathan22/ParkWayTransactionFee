@@ -4,12 +4,38 @@
     ViewData["Title"] = "Success";
 }
 
-@if (Model.Result != 0)
+@if (Model.Charge != 0)
 {
-    <div class="alert alert-success col-6" role="alert">
-        The transaction charge on<strong><em> &#8358;@Model.Amount is: &#8358;@Model.Result</em></strong><br /><br />
-        <a asp-page="Index" style="color:darkslategrey" class="alert-dark alert">Go Back</a> <br />
 
+    <h1>Advised Transfer Amount</h1>
+
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Amount(&#8358;)</th>
+                <th scope="col">Transfer Amount(&#8358;)</th>
+                <th scope="col">Charge(&#8358;)</th>
+                <th scope="col">Debit Amount(Transfer Amount + Charge)(&#8358;)</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>@Model.ActualAmount</td>
+                <td>@Model.TransferAmt</td>
+                <td>@Model.Charge</td>
+                <td>@Model.DebitAmount</td>
+
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="alert alert-success col-6" role="alert">
+        The transfer of <strong><em> &#8358;@Model.DebitAmount was successful. </em></strong><br /><br />
     </div>
+    <h5 style="padding-top: 2em; ">Go back to <a style="color:darkseagreen" asp-page="Index">Transfer page</a></h5>
+
 }
 

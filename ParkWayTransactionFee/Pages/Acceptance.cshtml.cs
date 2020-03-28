@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ParkWayTransactionFee
 {
-    public class SuccessModel : PageModel
+    public class AcceptanceModel : PageModel
     {
+
         [BindProperty(SupportsGet = true)]
         public float Charge { get; set; }
 
@@ -20,9 +21,12 @@ namespace ParkWayTransactionFee
 
         [BindProperty(SupportsGet = true)]
         public float DebitAmount { get; set; }
-        public void OnGet()
+     
+        public IActionResult OnPost()
         {
 
+            return RedirectToPage("Success", new { ActualAmount = ActualAmount, Charge = Charge, DebitAmount = DebitAmount, TransferAmt = TransferAmt });
+            
         }
     }
 }

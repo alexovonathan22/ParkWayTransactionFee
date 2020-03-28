@@ -15,20 +15,24 @@ namespace ParkWayTransactionFee.Pages
     public class IndexModel : PageModel
     {
         private readonly IOptions<List<Fee>> _fee;
-        public IndexModel(IOptions<List<Fee>> fee)
+        public IndexModel(IOptions<List<Fee>> feeOptions)
         {
-            _fee = fee;
+            _fee = feeOptions ?? throw new ArgumentNullException(nameof(feeOptions));
         }
-        //[BindProperty]
-        //public FeeCollection feeObj { get; set; }
+
 
         [BindProperty]
         public float Amount { get; set; }
 
-        public float UserValue { get; set; }
+        public float ActualAmount { get; set; }
 
         [BindProperty]
-        public float Result { get; set; }
+        public float FeeCharge { get; set; }
+        [BindProperty]
+        public float ActualFeeCharge { get; set; }
+        public float DebitAmount { get; set; }
+        [BindProperty]
+        public float TransferAmount { get; set; }
 
         public IActionResult OnPost()
         {
@@ -37,30 +41,54 @@ namespace ParkWayTransactionFee.Pages
             {
                 try
                 {
-                    if(Amount > 0 && Amount <= 999999999)
+                    if(Amount % 1 != 0)
                     {
-                         UserValue = Amount;
+                        ActualAmount = Amount;
                         int val = (int)Math.Ceiling(Amount);
                         Amount = val;
                     }
-
-                    Result = _fee.Value.Where(c => Amount <= c.maxAmount && Amount >= c.minAmount)
-                                         .Select(c => c.feeAmount).FirstOrDefault();
-
-                    if (Result != 0)
-                        return RedirectToPage("Success", new { Amount = UserValue, Result = Result });
                     else
-                        return RedirectToPage("Error", new { Amount = Amount, Result = Result });
+                    {
+                        ActualAmount = Amount;
+                    }
+                    
+                    FeeCharge = _fee.Value.Where(c => Amount <= c.maxAmount && Amount >= c.minAmount)
+                                         .Select(c => c.feeAmount).FirstOrDefault();
+                    ActualFeeCharge = FeeCharge;
 
+                    if (FeeCharge != 00)
+                    {
+                        TransferAmount = ActualAmount - FeeCharge;
 
+                        FeeCharge = _fee.Value.Where(c => TransferAmount <= c.maxAmount && TransferAmount >= c.minAmount)
+                                         .Select(c => c.feeAmount).FirstOrDefault();
+                        DebitAmount = TransferAmount + FeeCharge;
+
+                        //if this code is uncommeented and the return statement below is commented this should help remedy the disparity.
+
+                        //if(ActualFeeCharge == FeeCharge)
+                        //{
+                        //    return RedirectToPage("Acceptance", new { ActualAmount = ActualAmount, Charge = FeeCharge, TransferAmt = TransferAmount, DebitAmount =DebitAmount });
+
+                        //}
+                        //else
+                        //{
+
+                        //    return RedirectToPage("Acceptance", new { ActualAmount = ActualAmount, Charge = ActualFeeCharge, TransferAmt = TransferAmount, DebitAmount = TransferAmount + ActualFeeCharge });
+                        //}
+                        return RedirectToPage("Acceptance", new { ActualAmount = ActualAmount, Charge = FeeCharge, TransferAmt = TransferAmount, DebitAmount = DebitAmount });
+
+                    }
+                    else
+                    {
+                        return RedirectToPage("Error", new { Amount = Amount, Charge = FeeCharge });
+                    }
                 }
                 catch (Exception)
                 {
                     return Page();
                 }
             }
-            //var Fee = _fee.Value;
-
             return Page();
         }
     }

@@ -25,6 +25,7 @@ namespace ParkWayTransactionFee
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<List<Fee>>(Configuration.GetSection("fees"));
+            //services.Configure<Fee>(Configuration);
             services.AddRazorPages();
         }
 

@@ -1,0 +1,23 @@
+Discussion:
+
+Response: No.
+
+Reason: 
+
+the tranfer charges were made on the advised transfer amount not the Actual amount, thus the disparity.
+
+Remedy:
+
+i could create an extra variable to store the actual fee charge if the biz was not so generous to bear the transfer charge;
+
+then before making any final transfer check if ActualFeeCharge == TransferFeeCharge; 
+
+if it is equal use Transfer Fee charge
+else use actual fee charge;
+
+=> On #50030;
+if ActualFeeCharge == N50;
+and calculated or transfer fee charge == 25 because (50030 - 50 = 49980(which has transfer charge of N25));
+
+use ActualFeeCharge instead;
+this will make the debit amount == expected amount;

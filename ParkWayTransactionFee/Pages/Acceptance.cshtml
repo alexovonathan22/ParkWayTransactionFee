@@ -1,0 +1,44 @@
+﻿@page
+@model ParkWayTransactionFee.AcceptanceModel
+@{
+    ViewData["Title"] = "Acceptance";
+}
+
+<h1>Advised Transfer Amount</h1>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Amount(&#8358;)</th>
+            <th scope="col">Transfer Amount(&#8358;)</th>
+            <th scope="col">Charge(&#8358;)</th>
+            <th scope="col">Debit Amount(Transfer Amount + Charge)(&#8358;)</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>@Model.ActualAmount</td>
+            <td>@Model.TransferAmt</td>
+            <td>@Model.Charge</td>
+            <td>@Model.DebitAmount</td>
+
+        </tr>
+    </tbody>
+</table>
+<br />
+<form method="post" class="form-group row">
+    <div class="col-md-12">
+
+        <div class="alert alert-primary col-6" role="alert">
+            The transaction amount of<strong><em> &#8358;@Model.TransferAmt will be made! Click below to confirm</em></strong>
+        </div>
+        <button type="submit" class="btn btn-primary">Confirm Transfer</button>
+    </div>
+
+</form>
+
+<h5 style="padding-top: 2em;">Go back to <a asp-page="Index">Transfer page</a></h5>
+

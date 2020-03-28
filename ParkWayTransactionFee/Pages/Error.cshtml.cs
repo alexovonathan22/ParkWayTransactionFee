@@ -12,11 +12,11 @@ namespace ParkWayTransactionFee.Pages
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public class ErrorModel : PageModel
     {
-        public int Result { get; set; }
-        public int Amount { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public float Amount { get; set; }
 
-
-
+        [BindProperty(SupportsGet = true)]
+        public float Charge { get; set; }
 
         public void OnGet()
         {
